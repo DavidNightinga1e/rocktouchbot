@@ -1,0 +1,11 @@
+# Виртуальное окружение
+venv/
+.env
+
+# PyCharm
+.idea/
+__pycache__/
+*.pyc
+
+#данные бота
+data/
