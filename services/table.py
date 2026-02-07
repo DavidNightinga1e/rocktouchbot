@@ -1,22 +1,5 @@
 ﻿from services.storage import load_clients
-from datetime import date
-from datetime import datetime
-
-
-def days_until(date_str: str) -> int:
-    """
-    Считает количество дней от сегодня до указанной даты.
-
-    :param date_str: дата в формате "YYYY-MM-DD"
-    :return: число дней (может быть отрицательным, если дата уже прошла)
-    """
-    try:
-        target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        today = datetime.today().date()
-        delta = target_date - today
-        return delta.days
-    except (ValueError, TypeError):
-        return None  # если дата некорректная или пустая
+from utils.dateutils import days_until
 
 
 def format_clients_table() -> str:

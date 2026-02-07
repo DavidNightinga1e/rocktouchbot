@@ -1,6 +1,4 @@
-﻿import os
-
-from telebot import TeleBot
+﻿from telebot import TeleBot
 from utils.permissions import init_permissions
 from handlers.admin import register_admin_handlers
 from handlers.public import register_public_handlers
@@ -13,7 +11,7 @@ config = dotenv_values()
 print("Creating bot")
 TOKEN = config["TELEGRAM_TOKEN"]
 if not TOKEN:
-    raise ValueError("Не найден TELEGRAM_TOKEN в .env")
+    raise ValueError("TELEGRAM_TOKEN not found in .env")
 
 bot = TeleBot(TOKEN)
 
@@ -27,4 +25,4 @@ print("Registering handlers: public")
 register_public_handlers(bot)
 
 print("Starting bot")
-bot.polling()
+bot.infinity_polling(skip_pending=True)

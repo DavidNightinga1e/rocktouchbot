@@ -1,8 +1,10 @@
 ﻿from telebot import TeleBot
 
 from services.payments import pay_subscription
-from services.storage import add_client, normalize_name
+from services.setexpiration import set_client_expiration
+from services.storage import add_client, normalize_name, remove_client
 from services.trainings import train_clients, parse_train_arg
+from utils.dateutils import days_until, parse_date
 from utils.permissions import require_admin
 from utils.safehandler import safe_handler
 
@@ -143,3 +145,86 @@ def register_admin_handlers(bot: TeleBot):
             )
 
         bot.reply_to(message, "\n".join(response_lines))
+
+    @bot.message_handler(commands=['set_expire'])
+    @safe_handler(bot)
+    def set_expire_handler(message):
+        if not require_admin(bot, message):
+            return
+
+        parts = message.text.split()[1:]
+        if not parts or len(parts) != 2:
+            bot.reply_to(
+                message,
+                "⚠ Использование: /set_expire Имя Дата\n"
+                "Пример: /set_expire Анна 2026-04-19"
+            )
+            return
+
+        name, date_str = parts
+
+        name = normalize_name(name)
+        set_date = parse_date(date_str)
+
+        if not name or set_date is None:
+            bot.reply_to(
+                message,
+                "⚠ Неверный формат\n"
+                "Пример: /set_expire Анна 2026-04-19"
+            )
+            return
+
+        try:
+            set_client_expiration(name, set_date)
+        except ValueError as e:
+            bot.reply_to(message, f"⚠ {e}")
+            return
+
+        bot.reply_to(
+            message,
+            f"✅ {name}: абонемент до {set_date} (осталось {days_until(set_date.isoformat())})\n"
+        )
+
+    @bot.message_handler(commands=['remove'])
+    @safe_handler(bot)
+    def remove_client_handler(message):
+        if not require_admin(bot, message):
+            return
+
+        parts = message.text.split(maxsplit=2)
+        if len(parts) < 3:
+            bot.reply_to(message, "⚠ Использование: /remove Имя CONFIRM")
+            return
+
+        raw_name = parts[1].strip()
+        confirmation_str = parts[2].strip()
+
+        if not confirmation_str or confirmation_str != "CONFIRM":
+            bot.reply_to(
+                message,
+                "⚠ Не распознано подтверждение удаления\n"
+                "Пример: /remove Анна CONFIRM"
+            )
+            return
+
+        if not raw_name.isalpha():
+            bot.reply_to(
+                message,
+                "⚠ Имя должно состоять только из букв\n"
+                "Пример: /remove Анна CONFIRM"
+            )
+            return
+
+        name = normalize_name(raw_name)
+
+        try:
+            remove_client(name)
+        except ValueError as e:
+            bot.reply_to(message, f"⚠ {e}")
+            return
+
+        bot.reply_to(
+            message,
+            f"✅ Клиент *{name}* успешно удален\n",
+            parse_mode="Markdown"
+        )

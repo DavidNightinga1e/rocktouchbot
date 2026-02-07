@@ -109,3 +109,14 @@ def update_client(name: str, client_data: Dict[str, Any]) -> None:
 
     data["clients"][name] = client_data
     save_clients(data)
+
+
+def remove_client(name: str) -> None:
+    name = normalize_name(name)
+    data = load_clients()
+
+    if name not in data["clients"]:
+        raise ValueError(f"Клиент '{name}' не найден")
+
+    data["clients"].pop(name)
+    save_clients(data)
