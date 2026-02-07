@@ -1,5 +1,4 @@
-﻿from random import choice
-from telebot import TeleBot
+﻿from telebot import TeleBot
 from services.table import format_clients_table
 from utils.permissions import is_admin
 from utils.safehandler import safe_handler
