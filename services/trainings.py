@@ -47,6 +47,8 @@ def train_clients(clients_with_counts: dict) -> dict:
         name = normalize_name(raw_name)
         client = get_client(name)
         client["visits"] -= count  # отрицательное visits допустимо
+        if client["visits"] <= 0:
+            client["expires"] = None
         update_client(name, client)
         results[name] = {"success": True, "visits": client["visits"]}
 

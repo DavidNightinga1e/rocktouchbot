@@ -16,7 +16,7 @@ def _ensure_file(path: str, default_data: Dict[str, Any]) -> None:
     """Создаёт файл с дефолтным содержимым, если его нет"""
     if not os.path.exists(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "w", encoding="utf-8-sig") as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(default_data, f, ensure_ascii=False, indent=2)
 
 
@@ -29,7 +29,7 @@ def _load_json(path: str, default_data: Dict[str, Any]) -> Dict[str, Any]:
 def _save_json(path: str, data: Dict[str, Any]) -> None:
     # атомарная запись
     tmp_path = path + ".tmp"
-    with open(tmp_path, "w", encoding="utf-8-sig") as f:
+    with open(tmp_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     os.replace(tmp_path, path)
 

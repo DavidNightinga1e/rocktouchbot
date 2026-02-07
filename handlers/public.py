@@ -10,7 +10,7 @@ def register_public_handlers(bot: TeleBot):
     @safe_handler(bot)
     def table_handler(message):
         table_text = format_clients_table()
-        bot.reply_to(message, f"📋 Текущие посещения:\n\n{table_text}")
+        bot.reply_to(message, f"📋 Текущие посещения:\n\n{table_text}", parse_mode="HTML")
 
     @bot.message_handler(commands=['info'])
     @safe_handler(bot)

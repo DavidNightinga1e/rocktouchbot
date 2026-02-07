@@ -15,6 +15,8 @@ def format_clients_table() -> str:
     for name, data in clients.items():
         visits = data.get("visits", 0)
         expires = data.get("expires", "не указан")
-        lines.append(f"{name}: {visits} (до {expires}, {days_until(expires)} дней)")
+        color_prefix = "💚" if visits > 2 else "💛" if visits > 0 else "💔"
+        expiration_info = f"(до {expires}, {days_until(expires)} дней)" if expires else ""
+        lines.append(f"{color_prefix} {name}: <b>{visits}</b> {expiration_info}")
 
     return "\n".join(lines)
