@@ -2,7 +2,7 @@
 
 from services.payments import pay_subscription
 from services.setexpiration import set_client_expiration
-from services.storage import add_client, normalize_name, remove_client
+from services.storage import add_client, normalize_name, remove_client, load_clients_raw_json
 from services.trainings import train_clients, parse_train_arg
 from utils.dateutils import days_until, parse_date
 from utils.permissions import require_admin
@@ -227,4 +227,16 @@ def register_admin_handlers(bot: TeleBot):
             message,
             f"✅ Клиент *{name}* успешно удален\n",
             parse_mode="Markdown"
+        )
+
+
+    @bot.message_handler(commands=['export'])
+    @safe_handler(bot)
+    def export_handler(message):
+        if not require_admin(bot, message):
+            return
+
+        bot.reply_to(
+            message,
+            load_clients_raw_json()
         )

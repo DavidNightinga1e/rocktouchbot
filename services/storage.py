@@ -44,6 +44,12 @@ def normalize_name(name: str) -> str:
 
 # ---------- public API ----------
 
+def load_clients_raw_json():
+    _ensure_file(CLIENTS_FILE, {"clients": {}})
+    with open(CLIENTS_FILE, "r", encoding="utf-8-sig") as f:
+        return f.read()
+
+
 def load_clients() -> Dict[str, Any]:
     """
     Возвращает структуру:
