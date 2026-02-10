@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  rocktouchbot:
+    build: .
+    container_name: rocktouchbot
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./data:/app/data
+
+    command: python bot.py
