@@ -22,16 +22,7 @@ def pay_subscription(name: str, visits: int) -> dict:
     if client is None:
         raise ValueError(f"Клиент '{name}' не найден")
 
-    today = date.today()
-
-    expires_raw = client.get("expires")
-    if expires_raw:
-        expires = date.fromisoformat(expires_raw)
-        base_date = max(today, expires)
-    else:
-        base_date = today
-
-    new_expires = base_date + relativedelta(months=2)
+    new_expires = date.today() + relativedelta(months=2)
 
     client["visits"] += visits
     client["expires"] = new_expires.isoformat()
