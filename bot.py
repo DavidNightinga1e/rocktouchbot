@@ -13,6 +13,7 @@ TOKEN = config["TELEGRAM_TOKEN"]
 if not TOKEN:
     raise ValueError("TELEGRAM_TOKEN not found in .env")
 
+print("Starting with token: " + TOKEN[:6])
 bot = TeleBot(TOKEN)
 
 print("Init permissions")
