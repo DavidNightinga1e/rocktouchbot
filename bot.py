@@ -1,18 +1,22 @@
-﻿from telebot import TeleBot
+﻿import os
+
+from telebot import TeleBot
 from utils.permissions import init_permissions
 from handlers.admin import register_admin_handlers
 from handlers.public import register_public_handlers
 from dotenv import dotenv_values
 
 
-print("Loading env")
-config = dotenv_values()
+# print("Loading env")
+# config = dotenv_values()
+#
+# print("Creating bot")
+# TOKEN = config["TELEGRAM_TOKEN"]
+# if not TOKEN:
+#     raise ValueError("TELEGRAM_TOKEN not found in .env")
+# 
 
-print("Creating bot")
-TOKEN = config["TELEGRAM_TOKEN"]
-if not TOKEN:
-    raise ValueError("TELEGRAM_TOKEN not found in .env")
-
+TOKEN = os.getenv("TOKEN")
 print("Starting with token: " + TOKEN[:6])
 bot = TeleBot(TOKEN)
 
