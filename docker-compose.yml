@@ -1,16 +1,8 @@
 version: "3.9"
 
 services:
-  builder:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: rocktouchbot:latest
-    profiles:
-      - donotstart
-
   rocktouchbot:
-    image: rocktouchbot:latest
+    build: .
     container_name: rocktouchbot
     restart: unless-stopped
 
@@ -23,7 +15,7 @@ services:
     command: python bot.py
 
   childrengroup:
-    image: rocktouchbot:latest
+    build: .
     container_name: childrengroup
     restart: unless-stopped
 
